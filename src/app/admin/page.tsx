@@ -24,11 +24,59 @@ export default function AdminPage() {
   const [filterLocation, setFilterLocation] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [activeTab, setActiveTab] = useState<'applications' | 'analytics'>('applications')
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [loginError, setLoginError] = useState('')
+  const [loggingIn, setLoggingIn] = useState(false)
   const itemsPerPage = 5
 
   useEffect(() => {
-    fetchApplications()
-  }, [])
+    if (isAuthenticated) {
+      fetchApplications()
+    }
+  }, [isAuthenticated])
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setLoggingIn(true)
+    setLoginError('')
+
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setIsAuthenticated(true)
+        setUsername('')
+        setPassword('')
+      } else {
+        setLoginError(data.error || 'Giriş uğursuz oldu')
+      }
+    } catch (error) {
+      console.error('Login error:', error)
+      setLoginError('Xəta baş verdi. Zəhmət olmasa yenidən cəhd edin.')
+    } finally {
+      setLoggingIn(false)
+    }
+  }
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' })
+      setIsAuthenticated(false)
+      setApplications([])
+    } catch (error) {
+      console.error('Logout error:', error)
+    }
+  }
 
   const fetchApplications = async () => {
     try {
@@ -117,6 +165,72 @@ export default function AdminPage() {
     setCurrentPage(1)
   }, [searchTerm, filterLocation])
 
+  // Login screen
+  if (!isAuthenticated) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-white to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-4">
+        <div className="w-full max-w-md">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 border border-gray-100 dark:border-gray-700">
+            <div className="text-center mb-8">
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 via-emerald-600 to-teal-600 bg-clip-text text-transparent mb-2">
+                İdarəetmə Paneli
+              </h1>
+              <p className="text-gray-600 dark:text-gray-300">Daxil olmaq üçün məlumatlarınızı daxil edin</p>
+            </div>
+
+            <form onSubmit={handleLogin} className="space-y-6">
+              <div>
+                <label htmlFor="username" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  İstifadəçi adı
+                </label>
+                <input
+                  id="username"
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="w-full bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200"
+                  placeholder="İstifadəçi adınızı daxil edin"
+                  required
+                  disabled={loggingIn}
+                />
+              </div>
+
+              <div>
+                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                  Şifrə
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200"
+                  placeholder="Şifrənizi daxil edin"
+                  required
+                  disabled={loggingIn}
+                />
+              </div>
+
+              {loginError && (
+                <div className="bg-red-50 dark:bg-red-900/30 border border-red-300 dark:border-red-700 rounded-lg p-3 text-red-700 dark:text-red-300 text-sm">
+                  {loginError}
+                </div>
+              )}
+
+              <button
+                type="submit"
+                disabled={loggingIn}
+                className="w-full bg-gradient-to-r from-emerald-500 via-teal-600 to-blue-600 hover:from-emerald-600 hover:via-teal-700 hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-3 px-6 rounded-xl focus:outline-none focus:ring-4 focus:ring-emerald-300 transition-all duration-300 transform hover:scale-105 disabled:scale-100 shadow-xl"
+              >
+                {loggingIn ? 'Giriş edilir...' : 'Daxil ol'}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-white to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
@@ -171,14 +285,23 @@ export default function AdminPage() {
                     )}
                   </p>
                 </div>
-                <button
-                  onClick={exportToExcel}
-                  disabled={filteredApplications.length === 0}
-                  className="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:scale-100 shadow-lg flex items-center justify-center gap-2"
-                >
-                  <span className="text-xl">📊</span>
-                  <span>Excel-ə Köçür</span>
-                </button>
+                <div className="flex gap-2 w-full sm:w-auto">
+                  <button
+                    onClick={exportToExcel}
+                    disabled={filteredApplications.length === 0}
+                    className="flex-1 sm:flex-none bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:scale-100 shadow-lg flex items-center justify-center gap-2"
+                  >
+                    <span className="text-xl">📊</span>
+                    <span>Excel-ə Köçür</span>
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="bg-red-500 hover:bg-red-600 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg"
+                    title="Çıxış"
+                  >
+                    🚪 Çıxış
+                  </button>
+                </div>
               </div>
 
               {/* Tabs */}
