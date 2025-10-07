@@ -44,81 +44,92 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-24">
-      <h1 className="text-4xl font-bold mb-8">Job Application Form</h1>
-      <form className="w-full max-w-lg" onSubmit={handleSubmit}>
+    <main className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 lg:p-24 bg-gradient-to-br from-blue-50 via-white to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="w-full max-w-4xl">
+        <div className="text-center mb-10 animate-fadeIn">
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 bg-gradient-to-r from-blue-600 via-emerald-600 to-teal-600 bg-clip-text text-transparent">
+            Bizim Oba
+          </h1>
+          <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300">Join Our Growing Team</p>
+        </div>
+      <form className="w-full bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 sm:p-8 lg:p-10 border border-gray-100 dark:border-gray-700 animate-slideUp" onSubmit={handleSubmit}>
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="name">
+            <label className="block uppercase tracking-wide text-gray-700 dark:text-gray-300 text-xs font-bold mb-2" htmlFor="name">
               Name
             </label>
-            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white" id="name" type="text" placeholder="Jane" value={formData.name} onChange={handleChange} />
+            <input className="appearance-none block w-full bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200" id="name" type="text" placeholder="Jane" value={formData.name} onChange={handleChange} required />
           </div>
           <div className="w-full md:w-1/2 px-3">
-            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="surname">
+            <label className="block uppercase tracking-wide text-gray-700 dark:text-gray-300 text-xs font-bold mb-2" htmlFor="surname">
               Surname
             </label>
-            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="surname" type="text" placeholder="Doe" value={formData.surname} onChange={handleChange} />
+            <input className="appearance-none block w-full bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200" id="surname" type="text" placeholder="Doe" value={formData.surname} onChange={handleChange} required />
           </div>
         </div>
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full px-3">
-            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="phone">
+            <label className="block uppercase tracking-wide text-gray-700 dark:text-gray-300 text-xs font-bold mb-2" htmlFor="phone">
               Phone
             </label>
-            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="phone" type="tel" placeholder="+994 XX XXX XX XX" value={formData.phone} onChange={handleChange} />
+            <input className="appearance-none block w-full bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200" id="phone" type="tel" placeholder="+994 XX XXX XX XX" value={formData.phone} onChange={handleChange} required />
           </div>
         </div>
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full px-3">
-            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="currentLivingPlace">
+            <label className="block uppercase tracking-wide text-gray-700 dark:text-gray-300 text-xs font-bold mb-2" htmlFor="currentLivingPlace">
               Current Living Place
             </label>
-            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="currentLivingPlace" type="text" placeholder="Baku, Azerbaijan" value={formData.currentLivingPlace} onChange={handleChange} />
+            <input className="appearance-none block w-full bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200" id="currentLivingPlace" type="text" placeholder="Baku, Azerbaijan" value={formData.currentLivingPlace} onChange={handleChange} required />
           </div>
         </div>
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full px-3">
-            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="placeToWork">
-              Place Where Want to Work
+            <label className="block uppercase tracking-wide text-gray-700 dark:text-gray-300 text-xs font-bold mb-2" htmlFor="placeToWork">
+              Preferred Work Location
             </label>
-            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="placeToWork" type="text" placeholder="Select from map" value={formData.placeToWork} readOnly />
-            <button type="button" onClick={() => setShowMap(!showMap)} className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-              {showMap ? 'Hide Map' : 'Select from Map'}
+            <input className="appearance-none block w-full bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg py-3 px-4 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200" id="placeToWork" type="text" placeholder="Select from map" value={formData.placeToWork} readOnly required />
+            <button type="button" onClick={() => setShowMap(!showMap)} className="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-300 transform hover:scale-105 shadow-md">
+              {showMap ? '✕ Hide Map' : '📍 Select from Map'}
             </button>
           </div>
         </div>
-        {showMap && <MapSelector onLocationSelect={handleLocationSelect} />}
-        <div className="flex flex-wrap -mx-3 mb-2">
+        {showMap && (
+          <div className="mb-6">
+            <MapSelector onLocationSelect={handleLocationSelect} />
+          </div>
+        )}
+        <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="jobTitle">
+            <label className="block uppercase tracking-wide text-gray-700 dark:text-gray-300 text-xs font-bold mb-2" htmlFor="jobTitle">
               Job Title
             </label>
-            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="jobTitle" type="text" placeholder="Cashier" value={formData.jobTitle} onChange={handleChange} />
+            <input className="appearance-none block w-full bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200" id="jobTitle" type="text" placeholder="Cashier" value={formData.jobTitle} onChange={handleChange} required />
           </div>
           <div className="w-full md:w-1/2 px-3">
-            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="expectedSalary">
+            <label className="block uppercase tracking-wide text-gray-700 dark:text-gray-300 text-xs font-bold mb-2" htmlFor="expectedSalary">
               Expected Salary (AZN)
             </label>
-            <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="expectedSalary" type="number" placeholder="500" value={formData.expectedSalary} onChange={handleChange} />
+            <input className="appearance-none block w-full bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200" id="expectedSalary" type="number" placeholder="500" value={formData.expectedSalary} onChange={handleChange} required />
           </div>
         </div>
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full px-3">
-            <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="info">
-              Info
+            <label className="block uppercase tracking-wide text-gray-700 dark:text-gray-300 text-xs font-bold mb-2" htmlFor="info">
+              Additional Information
             </label>
-            <textarea className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="info" placeholder="Tell us more about yourself" value={formData.info} onChange={handleChange}></textarea>
+            <textarea className="appearance-none block w-full bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg py-3 px-4 leading-tight focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 min-h-[120px] resize-y" id="info" placeholder="Tell us more about yourself, your experience, and why you'd like to join our team..." value={formData.info} onChange={handleChange}></textarea>
           </div>
         </div>
-        <div className="flex flex-wrap -mx-3 mt-6">
+        <div className="flex flex-wrap -mx-3 mt-8">
             <div className="w-full px-3">
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
-                    Apply
+                <button className="w-full bg-gradient-to-r from-emerald-500 via-teal-600 to-blue-600 hover:from-emerald-600 hover:via-teal-700 hover:to-blue-700 text-white font-bold py-4 px-8 rounded-xl focus:outline-none focus:ring-4 focus:ring-emerald-300 transition-all duration-300 transform hover:scale-[1.02] shadow-xl hover:shadow-2xl" type="submit">
+                    Submit Application
                 </button>
             </div>
         </div>
       </form>
+      </div>
     </main>
   );
 }

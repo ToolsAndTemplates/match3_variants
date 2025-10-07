@@ -47,25 +47,36 @@ export default function MapSelector({ onLocationSelect }: MapSelectorProps) {
   }, [])
 
   return (
-    <MapContainer center={[40.3777, 49.8924]} zoom={11} style={{ height: '400px', width: '100%' }}>
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      />
-      {locations.map((location, index) =>
-        location.latitude && location.longitude ? (
-          <Marker key={index} position={[location.latitude, location.longitude]}>
-            <Popup>
-              <div>
-                <div>{location.name}</div>
-                <button type="button" onClick={() => onLocationSelect(location.name ?? '')}>
-                  Select
-                </button>
-              </div>
-            </Popup>
-          </Marker>
-        ) : null
-      )}
-    </MapContainer>
+    <div className="rounded-xl overflow-hidden shadow-2xl border border-gray-200 dark:border-gray-700 animate-fadeIn">
+      <MapContainer
+        center={[40.3777, 49.8924]}
+        zoom={11}
+        style={{ height: '500px', width: '100%' }}
+        className="z-0"
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        />
+        {locations.map((location, index) =>
+          location.latitude && location.longitude ? (
+            <Marker key={index} position={[location.latitude, location.longitude]}>
+              <Popup>
+                <div className="p-2">
+                  <div className="font-semibold text-lg mb-2 text-gray-800">{location.name}</div>
+                  <button
+                    type="button"
+                    onClick={() => onLocationSelect(location.name ?? '')}
+                    className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md"
+                  >
+                    Select Location
+                  </button>
+                </div>
+              </Popup>
+            </Marker>
+          ) : null
+        )}
+      </MapContainer>
+    </div>
   )
 }
