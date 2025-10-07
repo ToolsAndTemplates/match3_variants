@@ -43,9 +43,7 @@ export default function Home() {
       console.log(data)
 
       if (response.ok) {
-        // Show success message briefly before redirect
-        alert('Application submitted successfully! Redirecting...')
-        // Redirect to oba.az
+        // Redirect directly to oba.az without alert
         window.location.href = 'https://oba.az/'
       } else {
         alert('Failed to submit application. Please try again.')
