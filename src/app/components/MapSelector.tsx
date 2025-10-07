@@ -76,7 +76,7 @@ export default function MapSelector({ onLocationSelect }: MapSelectorProps) {
         const data = await response.json()
         setLocations(data)
       } catch (err) {
-        setError('Unable to load locations. Please try again.')
+        setError('Məkanlar yüklənə bilmədi. Zəhmət olmasa yenidən cəhd edin.')
         console.error('Failed to fetch locations', err)
       } finally {
         setLoading(false)
@@ -93,7 +93,7 @@ export default function MapSelector({ onLocationSelect }: MapSelectorProps) {
 
   const getUserLocation = () => {
     if (!navigator.geolocation) {
-      setLocationError('Geolocation is not supported by your browser')
+      setLocationError('Geolokasiya brauzeriniz tərəfindən dəstəklənmir')
       return
     }
 
@@ -112,16 +112,16 @@ export default function MapSelector({ onLocationSelect }: MapSelectorProps) {
         setGettingLocation(false)
         switch (error.code) {
           case error.PERMISSION_DENIED:
-            setLocationError('Location access denied. Please enable location permissions.')
+            setLocationError('Məkan girişi rədd edildi. Zəhmət olmasa məkan icazələrini aktiv edin.')
             break
           case error.POSITION_UNAVAILABLE:
-            setLocationError('Location information unavailable.')
+            setLocationError('Məkan məlumatı əlçatan deyil.')
             break
           case error.TIMEOUT:
-            setLocationError('Location request timed out.')
+            setLocationError('Məkan sorğusunun vaxtı bitdi.')
             break
           default:
-            setLocationError('An error occurred while getting your location.')
+            setLocationError('Məkanınız alınarkən xəta baş verdi.')
         }
       },
       {
@@ -150,7 +150,7 @@ export default function MapSelector({ onLocationSelect }: MapSelectorProps) {
         <div className="flex items-center justify-center h-[500px]">
           <div className="text-center">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-emerald-500 border-t-transparent"></div>
-            <p className="mt-4 text-gray-600 dark:text-gray-300 font-medium">Loading locations...</p>
+            <p className="mt-4 text-gray-600 dark:text-gray-300 font-medium">Məkanlar yüklənir...</p>
           </div>
         </div>
       </div>
@@ -178,7 +178,7 @@ export default function MapSelector({ onLocationSelect }: MapSelectorProps) {
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
               <span className="text-2xl">📍</span>
-              Available Locations
+              Mövcud Məkanlar
             </h3>
           </div>
 
@@ -192,12 +192,12 @@ export default function MapSelector({ onLocationSelect }: MapSelectorProps) {
             {gettingLocation ? (
               <>
                 <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent"></div>
-                <span>Finding you...</span>
+                <span>Axtarılır...</span>
               </>
             ) : (
               <>
                 <span className="text-xl">🧭</span>
-                <span>Find My Location</span>
+                <span>Mənim Yerimi Tap</span>
               </>
             )}
           </button>
@@ -212,7 +212,7 @@ export default function MapSelector({ onLocationSelect }: MapSelectorProps) {
             <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/30 border-2 border-blue-400 dark:border-blue-600 rounded-lg animate-fadeIn">
               <div className="flex items-center gap-2 text-blue-700 dark:text-blue-300 text-sm font-medium">
                 <span>📍</span>
-                <span>Your location marked on map</span>
+                <span>Sizin məkanınız xəritədə qeyd olundu</span>
               </div>
             </div>
           )}
@@ -244,10 +244,10 @@ export default function MapSelector({ onLocationSelect }: MapSelectorProps) {
                       <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                         {distance !== null ? (
                           <span className="font-medium text-blue-600 dark:text-blue-400">
-                            📏 {distance < 1 ? `${(distance * 1000).toFixed(0)}m` : `${distance.toFixed(1)}km`} away
+                            📏 {distance < 1 ? `${(distance * 1000).toFixed(0)}m` : `${distance.toFixed(1)}km`} uzaqlıqda
                           </span>
                         ) : (
-                          'Click to view on map'
+                          'Xəritədə görmək üçün klikləyin'
                         )}
                       </div>
                     </div>
@@ -301,8 +301,8 @@ export default function MapSelector({ onLocationSelect }: MapSelectorProps) {
               >
                 <Popup>
                   <div className="p-2 text-center">
-                    <div className="font-bold text-blue-600 mb-1">📍 You are here</div>
-                    <div className="text-xs text-gray-600">Your current location</div>
+                    <div className="font-bold text-blue-600 mb-1">📍 Siz buradasınız</div>
+                    <div className="text-xs text-gray-600">Sizin hazırki məkanınız</div>
                   </div>
                 </Popup>
               </Marker>
@@ -328,7 +328,7 @@ export default function MapSelector({ onLocationSelect }: MapSelectorProps) {
                           📏 {(() => {
                             const dist = calculateDistance(userLocation[0], userLocation[1], location.latitude!, location.longitude!)
                             return dist < 1 ? `${(dist * 1000).toFixed(0)}m` : `${dist.toFixed(1)}km`
-                          })()} from you
+                          })()} sizdən
                         </div>
                       )}
                       <button
@@ -336,7 +336,7 @@ export default function MapSelector({ onLocationSelect }: MapSelectorProps) {
                         onClick={() => handleLocationClick(location.name ?? '', location.latitude!, location.longitude!)}
                         className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-md"
                       >
-                        {selectedLocation === location.name ? '✓ Selected' : 'Select This Location'}
+                        {selectedLocation === location.name ? '✓ Seçildi' : 'Bu Məkanı Seç'}
                       </button>
                     </div>
                   </Popup>
@@ -349,7 +349,7 @@ export default function MapSelector({ onLocationSelect }: MapSelectorProps) {
           <div className="mt-4 p-4 bg-emerald-50 dark:bg-emerald-900/30 border-2 border-emerald-500 rounded-lg animate-fadeIn">
             <div className="flex items-center gap-2 text-emerald-700 dark:text-emerald-300">
               <span className="text-xl">✓</span>
-              <span className="font-semibold">Selected: {selectedLocation}</span>
+              <span className="font-semibold">Seçildi: {selectedLocation}</span>
             </div>
           </div>
         )}

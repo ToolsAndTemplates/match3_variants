@@ -49,15 +49,15 @@ export default function AdminPage() {
     // Prepare data for export
     const exportData = filteredApplications.map((app) => ({
       ID: app.id,
-      Name: app.name,
-      Surname: app.surname,
-      Phone: app.phone,
-      'Current Living Place': app.current_living_place,
-      'Preferred Work Location': app.place_to_work,
-      'Job Title': app.job_title,
-      'Expected Salary (AZN)': app.expected_salary,
-      'Additional Info': app.info || '',
-      'Applied Date': new Date(app.created_at).toLocaleString(),
+      Ad: app.name,
+      Soyad: app.surname,
+      Telefon: app.phone,
+      'Hazırki yaşayış yeri': app.current_living_place,
+      'İş yeri': app.place_to_work,
+      'Vəzifə': app.job_title,
+      'Gözlənilən maaş (AZN)': app.expected_salary,
+      'Əlavə məlumat': app.info || '',
+      'Müraciət tarixi': new Date(app.created_at).toLocaleString(),
     }))
 
     // Create worksheet
@@ -79,10 +79,10 @@ export default function AdminPage() {
 
     // Create workbook
     const wb = XLSX.utils.book_new()
-    XLSX.utils.book_append_sheet(wb, ws, 'Applications')
+    XLSX.utils.book_append_sheet(wb, ws, 'Müraciətlər')
 
     // Generate file name with current date
-    const fileName = `job_applications_${new Date().toISOString().split('T')[0]}.xlsx`
+    const fileName = `is_muracietleri_${new Date().toISOString().split('T')[0]}.xlsx`
 
     // Export file
     XLSX.writeFile(wb, fileName)
@@ -122,7 +122,7 @@ export default function AdminPage() {
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-emerald-500 border-t-transparent"></div>
           <p className="mt-4 text-gray-600 dark:text-gray-300 font-medium text-lg">
-            Loading applications...
+            Müraciətlər yüklənir...
           </p>
         </div>
       </div>
@@ -135,14 +135,14 @@ export default function AdminPage() {
         <div className="text-center bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-md">
           <div className="text-red-500 text-6xl mb-4">⚠️</div>
           <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">
-            Error Loading Data
+            Məlumat Yüklənmə Xətası
           </h2>
           <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>
           <button
             onClick={fetchApplications}
             className="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300"
           >
-            Retry
+            Yenidən Cəhd Et
           </button>
         </div>
       </div>
@@ -158,13 +158,13 @@ export default function AdminPage() {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div>
                 <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-blue-600 via-emerald-600 to-teal-600 bg-clip-text text-transparent mb-2">
-                  Admin Panel
+                  İdarəetmə Paneli
                 </h1>
                 <p className="text-gray-600 dark:text-gray-300">
-                  Total Applications: <span className="font-bold text-emerald-600">{applications.length}</span>
+                  Ümumi Müraciətlər: <span className="font-bold text-emerald-600">{applications.length}</span>
                   {filteredApplications.length !== applications.length && (
                     <span className="ml-2 text-sm">
-                      (Showing {filteredApplications.length})
+                      (Göstərilir {filteredApplications.length})
                     </span>
                   )}
                 </p>
@@ -175,7 +175,7 @@ export default function AdminPage() {
                 className="w-full sm:w-auto bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 disabled:scale-100 shadow-lg flex items-center justify-center gap-2"
               >
                 <span className="text-xl">📊</span>
-                <span>Export to Excel</span>
+                <span>Excel-ə Köçür</span>
               </button>
             </div>
           </div>
@@ -188,11 +188,11 @@ export default function AdminPage() {
               {/* Search */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  🔍 Search
+                  🔍 Axtar
                 </label>
                 <input
                   type="text"
-                  placeholder="Search by name, phone, or job title..."
+                  placeholder="Ad, telefon və ya vəzifə üzrə axtar..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200"
@@ -202,14 +202,14 @@ export default function AdminPage() {
               {/* Location Filter */}
               <div>
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  📍 Filter by Location
+                  📍 Məkan üzrə filter
                 </label>
                 <select
                   value={filterLocation}
                   onChange={(e) => setFilterLocation(e.target.value)}
                   className="w-full bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200"
                 >
-                  <option value="">All Locations</option>
+                  <option value="">Bütün məkanlar</option>
                   {uniqueLocations.map((location) => (
                     <option key={location} value={location}>
                       {location}
@@ -227,12 +227,12 @@ export default function AdminPage() {
             <div className="text-center py-16 px-4">
               <div className="text-6xl mb-4">📭</div>
               <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                No Applications Found
+                Müraciət Tapılmadı
               </h3>
               <p className="text-gray-500 dark:text-gray-400">
                 {applications.length === 0
-                  ? 'No applications have been submitted yet.'
-                  : 'Try adjusting your search or filter criteria.'}
+                  ? 'Hələ heç bir müraciət edilməyib.'
+                  : 'Axtarış və ya filter kriteriyalarını dəyişdirməyi cəhd edin.'}
               </p>
             </div>
           ) : (
@@ -241,12 +241,12 @@ export default function AdminPage() {
                 <table className="w-full">
                   <thead className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white">
                     <tr>
-                      <th className="py-4 px-6 text-left font-bold text-base">Name</th>
-                      <th className="py-4 px-6 text-left font-bold text-base">Phone</th>
-                      <th className="py-4 px-6 text-left font-bold text-base">Location</th>
-                      <th className="py-4 px-6 text-left font-bold text-base">Work Location</th>
-                      <th className="py-4 px-6 text-left font-bold text-base">Job Title</th>
-                      <th className="py-4 px-6 text-left font-bold text-base">Salary</th>
+                      <th className="py-4 px-6 text-left font-bold text-base">Ad Soyad</th>
+                      <th className="py-4 px-6 text-left font-bold text-base">Telefon</th>
+                      <th className="py-4 px-6 text-left font-bold text-base">Yaşayış Yeri</th>
+                      <th className="py-4 px-6 text-left font-bold text-base">İş Yeri</th>
+                      <th className="py-4 px-6 text-left font-bold text-base">Vəzifə</th>
+                      <th className="py-4 px-6 text-left font-bold text-base">Maaş</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -288,11 +288,11 @@ export default function AdminPage() {
                 <div className="border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 px-6 py-4">
                   <div className="flex items-center justify-between">
                     <div className="text-sm text-gray-600 dark:text-gray-400">
-                      Showing <span className="font-semibold text-gray-900 dark:text-gray-100">{startIndex + 1}</span> to{' '}
+                      Göstərilir <span className="font-semibold text-gray-900 dark:text-gray-100">{startIndex + 1}</span> - {' '}
                       <span className="font-semibold text-gray-900 dark:text-gray-100">
                         {Math.min(endIndex, filteredApplications.length)}
                       </span>{' '}
-                      of <span className="font-semibold text-gray-900 dark:text-gray-100">{filteredApplications.length}</span> applications
+                      / <span className="font-semibold text-gray-900 dark:text-gray-100">{filteredApplications.length}</span> müraciət
                     </div>
                     <div className="flex gap-2">
                       <button
@@ -300,7 +300,7 @@ export default function AdminPage() {
                         disabled={currentPage === 1}
                         className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                       >
-                        ← Previous
+                        ← Əvvəlki
                       </button>
                       <div className="flex gap-1">
                         {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -322,7 +322,7 @@ export default function AdminPage() {
                         disabled={currentPage === totalPages}
                         className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                       >
-                        Next →
+                        Növbəti →
                       </button>
                     </div>
                   </div>
@@ -336,7 +336,7 @@ export default function AdminPage() {
         {filteredApplications.length > 0 && (
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 animate-fadeIn">
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
-              <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Average Salary</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Orta Maaş</div>
               <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
                 {Math.round(
                   filteredApplications.reduce((sum, app) => sum + app.expected_salary, 0) /
@@ -346,7 +346,7 @@ export default function AdminPage() {
               </div>
             </div>
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
-              <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Most Popular Job</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Ən Populyar Vəzifə</div>
               <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 truncate">
                 {Object.entries(
                   filteredApplications.reduce((acc, app) => {
@@ -357,7 +357,7 @@ export default function AdminPage() {
               </div>
             </div>
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
-              <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Most Requested Location</div>
+              <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Ən Çox Tələb Olunan Məkan</div>
               <div className="text-2xl font-bold text-teal-600 dark:text-teal-400 truncate">
                 {Object.entries(
                   filteredApplications.reduce((acc, app) => {
