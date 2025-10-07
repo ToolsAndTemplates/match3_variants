@@ -1,0 +1,31 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model locations {
+  latitude  Float?  @db.Real
+  longitude Float?  @db.Real
+  name      String? @db.VarChar(50)
+  id        Int     @id @default(autoincrement())
+
+  
+}
+
+model job_applications {
+  id                   Int      @id @default(autoincrement())
+  name                 String
+  surname              String
+  phone                String
+  current_living_place String
+  place_to_work        String
+  job_title            String
+  expected_salary      Int
+  info                 String?
+  created_at           DateTime @default(now())
+}
