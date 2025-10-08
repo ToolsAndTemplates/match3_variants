@@ -35,7 +35,7 @@ export default function AdminPage() {
   const [password, setPassword] = useState('')
   const [loginError, setLoginError] = useState('')
   const [loggingIn, setLoggingIn] = useState(false)
-  const itemsPerPage = 5
+  const itemsPerPage = 10
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -101,7 +101,6 @@ export default function AdminPage() {
   }
 
   const exportToExcel = () => {
-    // Prepare data for export
     const exportData = filteredApplications.map((app) => ({
       ID: app.id,
       Ad: app.name,
@@ -118,34 +117,16 @@ export default function AdminPage() {
       'Müraciət tarixi': new Date(app.created_at).toLocaleString(),
     }))
 
-    // Create worksheet
     const ws = XLSX.utils.json_to_sheet(exportData)
-
-    // Set column widths
     ws['!cols'] = [
-      { wch: 5 },  // ID
-      { wch: 15 }, // Name
-      { wch: 15 }, // Surname
-      { wch: 15 }, // Phone
-      { wch: 25 }, // Email
-      { wch: 20 }, // Current Living Place
-      { wch: 20 }, // Preferred Work Location
-      { wch: 20 }, // Job Posting
-      { wch: 15 }, // Job Title
-      { wch: 12 }, // Expected Salary
-      { wch: 50 }, // CV URL
-      { wch: 30 }, // Additional Info
-      { wch: 20 }, // Applied Date
+      { wch: 5 }, { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 25 },
+      { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 15 }, { wch: 12 },
+      { wch: 50 }, { wch: 30 }, { wch: 20 },
     ]
 
-    // Create workbook
     const wb = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(wb, ws, 'Müraciətlər')
-
-    // Generate file name with current date
     const fileName = `is_muracietleri_${new Date().toISOString().split('T')[0]}.xlsx`
-
-    // Export file
     XLSX.writeFile(wb, fileName)
   }
 
@@ -156,43 +137,37 @@ export default function AdminPage() {
       app.phone.includes(searchTerm) ||
       app.job_title.toLowerCase().includes(searchTerm.toLowerCase())
 
-    const matchesLocation =
-      filterLocation === '' || app.place_to_work === filterLocation
+    const matchesLocation = filterLocation === '' || app.place_to_work === filterLocation
 
     return matchesSearch && matchesLocation
   })
 
-  const uniqueLocations = Array.from(
-    new Set(applications.map((app) => app.place_to_work))
-  ).sort()
+  const uniqueLocations = Array.from(new Set(applications.map((app) => app.place_to_work))).sort()
 
-  // Pagination calculations
   const totalPages = Math.ceil(filteredApplications.length / itemsPerPage)
   const startIndex = (currentPage - 1) * itemsPerPage
   const endIndex = startIndex + itemsPerPage
   const currentApplications = filteredApplications.slice(startIndex, endIndex)
 
-  // Reset to page 1 when filters change
   useEffect(() => {
     setCurrentPage(1)
   }, [searchTerm, filterLocation])
 
-  // Login screen
   if (!isAuthenticated) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-white to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-4">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
         <div className="w-full max-w-md">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 border border-gray-100 dark:border-gray-700">
+          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-8">
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 via-emerald-600 to-teal-600 bg-clip-text text-transparent mb-2">
-                İdarəetmə Paneli
+              <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                Admin Panel
               </h1>
-              <p className="text-gray-600 dark:text-gray-300">Daxil olmaq üçün məlumatlarınızı daxil edin</p>
+              <p className="text-gray-600 dark:text-gray-400">Daxil olmaq üçün məlumatlarınızı daxil edin</p>
             </div>
 
             <form onSubmit={handleLogin} className="space-y-6">
               <div>
-                <label htmlFor="username" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   İstifadəçi adı
                 </label>
                 <input
@@ -200,7 +175,7 @@ export default function AdminPage() {
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="w-full bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                   placeholder="İstifadəçi adınızı daxil edin"
                   required
                   disabled={loggingIn}
@@ -208,7 +183,7 @@ export default function AdminPage() {
               </div>
 
               <div>
-                <label htmlFor="password" className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Şifrə
                 </label>
                 <input
@@ -216,7 +191,7 @@ export default function AdminPage() {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200"
+                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
                   placeholder="Şifrənizi daxil edin"
                   required
                   disabled={loggingIn}
@@ -224,7 +199,7 @@ export default function AdminPage() {
               </div>
 
               {loginError && (
-                <div className="bg-red-50 dark:bg-red-900/30 border border-red-300 dark:border-red-700 rounded-lg p-3 text-red-700 dark:text-red-300 text-sm">
+                <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-3 text-red-700 dark:text-red-300 text-sm">
                   {loginError}
                 </div>
               )}
@@ -232,7 +207,7 @@ export default function AdminPage() {
               <button
                 type="submit"
                 disabled={loggingIn}
-                className="w-full bg-gradient-to-r from-emerald-500 via-teal-600 to-blue-600 hover:from-emerald-600 hover:via-teal-700 hover:to-blue-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-3 px-6 rounded-xl focus:outline-none focus:ring-4 focus:ring-emerald-300 transition-all duration-300 transform hover:scale-105 disabled:scale-100 shadow-xl"
+                className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 text-white font-medium py-3 px-6 rounded-lg transition-colors disabled:cursor-not-allowed"
               >
                 {loggingIn ? 'Giriş edilir...' : 'Daxil ol'}
               </button>
@@ -245,12 +220,10 @@ export default function AdminPage() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-white to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-16 w-16 border-4 border-emerald-500 border-t-transparent"></div>
-          <p className="mt-4 text-gray-600 dark:text-gray-300 font-medium text-lg">
-            Müraciətlər yüklənir...
-          </p>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-emerald-500 border-t-transparent mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-400">Yüklənir...</p>
         </div>
       </div>
     )
@@ -258,16 +231,14 @@ export default function AdminPage() {
 
   if (error) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 via-white to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
-        <div className="text-center bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 max-w-md">
-          <div className="text-red-500 text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200 mb-2">
-            Məlumat Yüklənmə Xətası
-          </h2>
-          <p className="text-red-600 dark:text-red-400 mb-4">{error}</p>
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-center bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-8 max-w-md">
+          <div className="text-red-500 text-5xl mb-4">⚠️</div>
+          <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Xəta</h2>
+          <p className="text-gray-600 dark:text-gray-400 mb-4">{error}</p>
           <button
             onClick={fetchApplications}
-            className="bg-emerald-500 hover:bg-emerald-600 text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 px-6 rounded-lg transition-colors"
           >
             Yenidən Cəhd Et
           </button>
@@ -277,460 +248,340 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-3 sm:p-4 md:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-4 sm:mb-6 md:mb-8 animate-fadeIn">
-          <div className="bg-white dark:bg-gray-800 rounded-xl sm:rounded-2xl shadow-xl p-4 sm:p-6 md:p-8 border border-gray-100 dark:border-gray-700">
-            <div className="flex flex-col gap-3 sm:gap-4">
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
-                <div>
-                  <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-600 via-emerald-600 to-teal-600 bg-clip-text text-transparent mb-1 sm:mb-2">
-                    İdarəetmə Paneli
-                  </h1>
-                  <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300">
-                    Ümumi Müraciətlər: <span className="font-bold text-emerald-600">{applications.length}</span>
-                    {filteredApplications.length !== applications.length && (
-                      <span className="ml-2 text-xs sm:text-sm">
-                        (Göstərilir {filteredApplications.length})
-                      </span>
-                    )}
-                  </p>
-                </div>
-                <div className="flex gap-2 w-full sm:w-auto">
-                  <button
-                    onClick={exportToExcel}
-                    disabled={filteredApplications.length === 0}
-                    className="flex-1 sm:flex-none bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-bold py-2 sm:py-3 px-3 sm:px-6 text-sm sm:text-base rounded-lg sm:rounded-xl transition-all duration-300 transform active:scale-95 sm:hover:scale-105 disabled:scale-100 shadow-lg flex items-center justify-center gap-2"
-                  >
-                    <span className="text-lg sm:text-xl">📊</span>
-                    <span className="hidden xs:inline">Excel-ə Köçür</span>
-                    <span className="xs:hidden">Excel</span>
-                  </button>
-                  <button
-                    onClick={handleLogout}
-                    className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 sm:py-3 px-3 sm:px-4 text-sm sm:text-base rounded-lg sm:rounded-xl transition-all duration-300 transform active:scale-95 sm:hover:scale-105 shadow-lg whitespace-nowrap"
-                    title="Çıxış"
-                  >
-                    🚪 <span className="hidden xs:inline">Çıxış</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Tabs */}
-              <div className="flex gap-1 sm:gap-2 border-b border-gray-200 dark:border-gray-700 overflow-x-auto">
-                <button
-                  onClick={() => setActiveTab('applications')}
-                  className={`px-3 sm:px-4 py-2 text-sm sm:text-base font-semibold transition-all duration-200 border-b-2 whitespace-nowrap ${
-                    activeTab === 'applications'
-                      ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400'
-                      : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-emerald-500'
-                  }`}
-                >
-                  📋 Müraciətlər
-                </button>
-                <button
-                  onClick={() => setActiveTab('analytics')}
-                  className={`px-3 sm:px-4 py-2 text-sm sm:text-base font-semibold transition-all duration-200 border-b-2 whitespace-nowrap ${
-                    activeTab === 'analytics'
-                      ? 'border-emerald-500 text-emerald-600 dark:text-emerald-400'
-                      : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-emerald-500'
-                  }`}
-                >
-                  📈 Analitika
-                </button>
-                <button
-                  onClick={() => window.location.href = '/admin/jobs'}
-                  className="px-3 sm:px-4 py-2 text-sm sm:text-base font-semibold transition-all duration-200 border-b-2 border-transparent text-gray-600 dark:text-gray-400 hover:text-emerald-500 whitespace-nowrap"
-                >
-                  💼 Vakansiyalar
-                </button>
-              </div>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Header */}
+      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Admin Panel</h1>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+                {applications.length} ümumi müraciət
+              </p>
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={exportToExcel}
+                disabled={filteredApplications.length === 0}
+                className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 text-white font-medium py-2 px-4 rounded-lg transition-colors disabled:cursor-not-allowed"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Export
+              </button>
+              <button
+                onClick={handleLogout}
+                className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                </svg>
+                Çıxış
+              </button>
             </div>
           </div>
+
+          {/* Tabs */}
+          <div className="flex gap-4 mt-6 border-b border-gray-200 dark:border-gray-700">
+            <button
+              onClick={() => setActiveTab('applications')}
+              className={`pb-3 px-1 font-medium transition-colors border-b-2 ${
+                activeTab === 'applications'
+                  ? 'border-emerald-600 text-emerald-600 dark:text-emerald-500'
+                  : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              }`}
+            >
+              Müraciətlər
+            </button>
+            <button
+              onClick={() => setActiveTab('analytics')}
+              className={`pb-3 px-1 font-medium transition-colors border-b-2 ${
+                activeTab === 'analytics'
+                  ? 'border-emerald-600 text-emerald-600 dark:text-emerald-500'
+                  : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+              }`}
+            >
+              Analitika
+            </button>
+            <button
+              onClick={() => window.location.href = '/admin/jobs'}
+              className="pb-3 px-1 font-medium transition-colors border-b-2 border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+            >
+              Vakansiyalar
+            </button>
+            <a
+              href="/"
+              className="pb-3 px-1 font-medium transition-colors border-b-2 border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+            >
+              Ana Səhifə
+            </a>
+          </div>
         </div>
+      </header>
 
-        {/* Analytics Tab */}
-        {activeTab === 'analytics' && (
-          <div className="space-y-4 sm:space-y-6 animate-fadeIn">
-            {/* Top Stats Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-              <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-lg p-3 sm:p-4 md:p-6 border border-gray-100 dark:border-gray-700">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
-                  <div className="p-1.5 sm:p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg w-fit">
-                    <span className="text-xl sm:text-2xl">👥</span>
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {activeTab === 'applications' ? (
+          <>
+            {/* Filters */}
+            <div className="mb-6">
+              <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Axtar
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Ad, telefon və ya vəzifə..."
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                    />
                   </div>
-                  <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Ümumi Müraciətlər</div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Məkan
+                    </label>
+                    <select
+                      value={filterLocation}
+                      onChange={(e) => setFilterLocation(e.target.value)}
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:bg-gray-700 dark:text-white"
+                    >
+                      <option value="">Bütün məkanlar</option>
+                      {uniqueLocations.map((location) => (
+                        <option key={location} value={location}>
+                          {location}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-                <div className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400">{applications.length}</div>
               </div>
+            </div>
 
-              <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-lg p-3 sm:p-4 md:p-6 border border-gray-100 dark:border-gray-700">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
-                  <div className="p-1.5 sm:p-2 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg w-fit">
-                    <span className="text-xl sm:text-2xl">💰</span>
-                  </div>
-                  <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Orta Maaş</div>
+            {/* Table */}
+            <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+              {filteredApplications.length === 0 ? (
+                <div className="text-center py-12">
+                  <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                  </svg>
+                  <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                    Müraciət tapılmadı
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Filtrləri dəyişdirməyi cəhd edin
+                  </p>
                 </div>
-                <div className="text-xl sm:text-2xl md:text-3xl font-bold text-emerald-600 dark:text-emerald-400">
-                  {Math.round(applications.reduce((sum, app) => sum + app.expected_salary, 0) / applications.length || 0)} <span className="text-base sm:text-xl">AZN</span>
+              ) : (
+                <>
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                            Ad Soyad
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                            Əlaqə
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                            Vəzifə
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                            Maaş
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-700 dark:text-gray-300 uppercase tracking-wider">
+                            CV
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                        {currentApplications.map((app) => (
+                          <tr key={app.id} className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                            <td className="px-6 py-4">
+                              <div className="font-medium text-gray-900 dark:text-white">
+                                {app.name} {app.surname}
+                              </div>
+                              <div className="text-sm text-gray-600 dark:text-gray-400">
+                                {app.current_living_place}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="text-sm text-gray-900 dark:text-white">{app.phone}</div>
+                              <div className="text-sm text-gray-600 dark:text-gray-400">
+                                {app.email || '-'}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4">
+                              <div className="text-sm font-medium text-gray-900 dark:text-white">
+                                {app.job?.title || 'Ümumi'}
+                              </div>
+                              <div className="text-sm text-gray-600 dark:text-gray-400">
+                                {app.place_to_work}
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 text-sm font-medium text-gray-900 dark:text-white">
+                              {app.expected_salary} AZN
+                            </td>
+                            <td className="px-6 py-4">
+                              {app.cv_url ? (
+                                <a
+                                  href={app.cv_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1 text-emerald-600 hover:text-emerald-700 dark:text-emerald-500 dark:hover:text-emerald-400 font-medium text-sm"
+                                >
+                                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                  </svg>
+                                  Yüklə
+                                </a>
+                              ) : (
+                                <span className="text-sm text-gray-400">-</span>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Pagination */}
+                  {totalPages > 1 && (
+                    <div className="bg-gray-50 dark:bg-gray-700 px-6 py-4 border-t border-gray-200 dark:border-gray-600">
+                      <div className="flex items-center justify-between">
+                        <div className="text-sm text-gray-700 dark:text-gray-300">
+                          Göstərilir {startIndex + 1} - {Math.min(endIndex, filteredApplications.length)} / {filteredApplications.length}
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                            disabled={currentPage === 1}
+                            className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                          >
+                            Əvvəlki
+                          </button>
+                          <button
+                            onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                            disabled={currentPage === totalPages}
+                            className="px-3 py-1 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                          >
+                            Növbəti
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          </>
+        ) : (
+          /* Analytics Tab */
+          <div className="space-y-6">
+            {/* Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Ümumi</div>
+                <div className="text-3xl font-bold text-gray-900 dark:text-white">{applications.length}</div>
+              </div>
+              <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Orta Maaş</div>
+                <div className="text-3xl font-bold text-gray-900 dark:text-white">
+                  {Math.round(applications.reduce((sum, app) => sum + app.expected_salary, 0) / applications.length || 0)} AZN
                 </div>
               </div>
-
-              <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-lg p-3 sm:p-4 md:p-6 border border-gray-100 dark:border-gray-700">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
-                  <div className="p-1.5 sm:p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg w-fit">
-                    <span className="text-xl sm:text-2xl">🏢</span>
-                  </div>
-                  <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Unikal Məkanlar</div>
-                </div>
-                <div className="text-2xl sm:text-3xl font-bold text-purple-600 dark:text-purple-400">
+              <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Məkanlar</div>
+                <div className="text-3xl font-bold text-gray-900 dark:text-white">
                   {new Set(applications.map(app => app.place_to_work)).size}
                 </div>
               </div>
-
-              <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-lg p-3 sm:p-4 md:p-6 border border-gray-100 dark:border-gray-700">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-2">
-                  <div className="p-1.5 sm:p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg w-fit">
-                    <span className="text-xl sm:text-2xl">💼</span>
-                  </div>
-                  <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Vəzifə Növləri</div>
-                </div>
-                <div className="text-2xl sm:text-3xl font-bold text-orange-600 dark:text-orange-400">
+              <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Vəzifələr</div>
+                <div className="text-3xl font-bold text-gray-900 dark:text-white">
                   {new Set(applications.map(app => app.job_title)).size}
                 </div>
               </div>
             </div>
 
-            {/* Job Titles Distribution */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-lg p-4 sm:p-6 border border-gray-100 dark:border-gray-700">
-              <h3 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-200 mb-3 sm:mb-4 flex items-center gap-2">
-                <span>💼</span>
-                Vəzifələrə görə Bölgü
-              </h3>
-              <div className="space-y-3">
-                {Object.entries(
-                  applications.reduce((acc, app) => {
-                    acc[app.job_title] = (acc[app.job_title] || 0) + 1
-                    return acc
-                  }, {} as Record<string, number>)
-                )
-                  .sort((a, b) => b[1] - a[1])
-                  .map(([title, count]) => {
-                    const percentage = (count / applications.length) * 100
-                    return (
-                      <div key={title}>
-                        <div className="flex justify-between mb-1">
-                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{title}</span>
-                          <span className="text-sm font-semibold text-emerald-600 dark:text-emerald-400">
-                            {count} ({percentage.toFixed(1)}%)
-                          </span>
-                        </div>
-                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
-                          <div
-                            className="bg-gradient-to-r from-emerald-500 to-teal-600 h-2.5 rounded-full transition-all duration-500"
-                            style={{ width: `${percentage}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    )
-                  })}
-              </div>
-            </div>
-
-            {/* Location Distribution */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-lg p-4 sm:p-6 border border-gray-100 dark:border-gray-700">
-              <h3 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-200 mb-3 sm:mb-4 flex items-center gap-2">
-                <span>📍</span>
-                <span className="hidden sm:inline">Məkanlara görə Bölgü (Top 10)</span>
-                <span className="sm:hidden">Məkanlar (Top 10)</span>
-              </h3>
-              <div className="space-y-3">
-                {Object.entries(
-                  applications.reduce((acc, app) => {
-                    acc[app.place_to_work] = (acc[app.place_to_work] || 0) + 1
-                    return acc
-                  }, {} as Record<string, number>)
-                )
-                  .sort((a, b) => b[1] - a[1])
-                  .slice(0, 10)
-                  .map(([location, count]) => {
-                    const percentage = (count / applications.length) * 100
-                    return (
-                      <div key={location}>
-                        <div className="flex justify-between mb-1">
-                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{location}</span>
-                          <span className="text-sm font-semibold text-blue-600 dark:text-blue-400">
-                            {count} ({percentage.toFixed(1)}%)
-                          </span>
-                        </div>
-                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
-                          <div
-                            className="bg-gradient-to-r from-blue-500 to-indigo-600 h-2.5 rounded-full transition-all duration-500"
-                            style={{ width: `${percentage}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    )
-                  })}
-              </div>
-            </div>
-
-            {/* Salary Range Distribution */}
-            <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-lg p-4 sm:p-6 border border-gray-100 dark:border-gray-700">
-              <h3 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-200 mb-3 sm:mb-4 flex items-center gap-2">
-                <span>💵</span>
-                Maaş Aralığı Bölgüsü
-              </h3>
-              <div className="space-y-3">
-                {(() => {
-                  const ranges = {
-                    '500-700 AZN': applications.filter(app => app.expected_salary >= 500 && app.expected_salary < 700).length,
-                    '700-900 AZN': applications.filter(app => app.expected_salary >= 700 && app.expected_salary < 900).length,
-                    '900-1100 AZN': applications.filter(app => app.expected_salary >= 900 && app.expected_salary < 1100).length,
-                    '1100+ AZN': applications.filter(app => app.expected_salary >= 1100).length,
-                  }
-                  return Object.entries(ranges).map(([range, count]) => {
-                    const percentage = (count / applications.length) * 100
-                    return (
-                      <div key={range}>
-                        <div className="flex justify-between mb-1">
-                          <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{range}</span>
-                          <span className="text-sm font-semibold text-teal-600 dark:text-teal-400">
-                            {count} ({percentage.toFixed(1)}%)
-                          </span>
-                        </div>
-                        <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5">
-                          <div
-                            className="bg-gradient-to-r from-teal-500 to-cyan-600 h-2.5 rounded-full transition-all duration-500"
-                            style={{ width: `${percentage}%` }}
-                          ></div>
-                        </div>
-                      </div>
-                    )
-                  })
-                })()}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Filters */}
-        {activeTab === 'applications' && (
-        <>
-        <div className="mb-6 animate-slideUp">
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sm:p-6 border border-gray-100 dark:border-gray-700">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {/* Search */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  🔍 Axtar
-                </label>
-                <input
-                  type="text"
-                  placeholder="Ad, telefon və ya vəzifə üzrə axtar..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200"
-                />
-              </div>
-
-              {/* Location Filter */}
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  📍 Məkan üzrə filter
-                </label>
-                <select
-                  value={filterLocation}
-                  onChange={(e) => setFilterLocation(e.target.value)}
-                  className="w-full bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-300 dark:border-gray-600 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all duration-200"
-                >
-                  <option value="">Bütün məkanlar</option>
-                  {uniqueLocations.map((location) => (
-                    <option key={location} value={location}>
-                      {location}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Applications Table */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg sm:rounded-xl shadow-2xl border border-gray-100 dark:border-gray-700 overflow-hidden animate-slideUp">
-          {filteredApplications.length === 0 ? (
-            <div className="text-center py-12 sm:py-16 px-4">
-              <div className="text-4xl sm:text-6xl mb-3 sm:mb-4">📭</div>
-              <h3 className="text-lg sm:text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                Müraciət Tapılmadı
-              </h3>
-              <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400">
-                {applications.length === 0
-                  ? 'Hələ heç bir müraciət edilməyib.'
-                  : 'Axtarış və ya filter kriteriyalarını dəyişdirməyi cəhd edin.'}
-              </p>
-            </div>
-          ) : (
-            <>
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-[1000px]">
-                  <thead className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white">
-                    <tr>
-                      <th className="py-3 sm:py-4 px-3 sm:px-6 text-left font-bold text-sm sm:text-base whitespace-nowrap">Ad Soyad</th>
-                      <th className="py-3 sm:py-4 px-3 sm:px-6 text-left font-bold text-sm sm:text-base whitespace-nowrap">Telefon</th>
-                      <th className="py-3 sm:py-4 px-3 sm:px-6 text-left font-bold text-sm sm:text-base whitespace-nowrap">Email</th>
-                      <th className="py-3 sm:py-4 px-3 sm:px-6 text-left font-bold text-sm sm:text-base whitespace-nowrap">Vakansiya</th>
-                      <th className="py-3 sm:py-4 px-3 sm:px-6 text-left font-bold text-sm sm:text-base whitespace-nowrap">Vəzifə</th>
-                      <th className="py-3 sm:py-4 px-3 sm:px-6 text-left font-bold text-sm sm:text-base whitespace-nowrap">Maaş</th>
-                      <th className="py-3 sm:py-4 px-3 sm:px-6 text-left font-bold text-sm sm:text-base whitespace-nowrap">CV</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                    {currentApplications.map((app, index) => (
-                      <tr
-                        key={app.id}
-                        className={`hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors duration-200 ${
-                          index % 2 === 0 ? 'bg-gray-50 dark:bg-gray-900/50' : ''
-                        }`}
-                      >
-                        <td className="py-3 sm:py-5 px-3 sm:px-6 text-gray-800 dark:text-gray-200">
-                          <div className="font-semibold text-sm sm:text-base whitespace-nowrap">{app.name} {app.surname}</div>
-                          <div className="text-xs text-gray-500 dark:text-gray-400">{app.current_living_place}</div>
-                        </td>
-                        <td className="py-3 sm:py-5 px-3 sm:px-6 text-gray-700 dark:text-gray-300 font-medium text-sm sm:text-base whitespace-nowrap">
-                          {app.phone}
-                        </td>
-                        <td className="py-3 sm:py-5 px-3 sm:px-6 text-gray-700 dark:text-gray-300 text-sm sm:text-base">
-                          {app.email || '-'}
-                        </td>
-                        <td className="py-3 sm:py-5 px-3 sm:px-6">
-                          {app.job?.title ? (
-                            <span className="inline-flex items-center px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-200 whitespace-nowrap">
-                              💼 {app.job.title}
+            {/* Charts */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                  Vəzifələrə görə
+                </h3>
+                <div className="space-y-3">
+                  {Object.entries(
+                    applications.reduce((acc, app) => {
+                      acc[app.job_title] = (acc[app.job_title] || 0) + 1
+                      return acc
+                    }, {} as Record<string, number>)
+                  )
+                    .sort((a, b) => b[1] - a[1])
+                    .map(([title, count]) => {
+                      const percentage = (count / applications.length) * 100
+                      return (
+                        <div key={title}>
+                          <div className="flex justify-between mb-1">
+                            <span className="text-sm text-gray-700 dark:text-gray-300">{title}</span>
+                            <span className="text-sm font-medium text-gray-900 dark:text-white">
+                              {count} ({percentage.toFixed(1)}%)
                             </span>
-                          ) : (
-                            <span className="text-xs text-gray-500 dark:text-gray-400">Ümumi</span>
-                          )}
-                        </td>
-                        <td className="py-3 sm:py-5 px-3 sm:px-6">
-                          <span className="inline-flex items-center px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-semibold bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 whitespace-nowrap">
-                            {app.job_title}
-                          </span>
-                          <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">{app.place_to_work}</div>
-                        </td>
-                        <td className="py-3 sm:py-5 px-3 sm:px-6 font-bold text-emerald-600 dark:text-emerald-400 text-sm sm:text-base whitespace-nowrap">
-                          {app.expected_salary} AZN
-                        </td>
-                        <td className="py-3 sm:py-5 px-3 sm:px-6">
-                          {app.cv_url ? (
-                            <a
-                              href={app.cv_url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center px-3 py-1.5 bg-indigo-500 hover:bg-indigo-600 text-white text-xs font-semibold rounded-lg transition-all duration-200"
-                            >
-                              📄 Yüklə
-                            </a>
-                          ) : (
-                            <span className="text-xs text-gray-400">-</span>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-
-              {/* Pagination */}
-              {totalPages > 1 && (
-                <div className="border-t border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 px-6 py-4">
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                      Göstərilir <span className="font-semibold text-gray-900 dark:text-gray-100">{startIndex + 1}</span> - {' '}
-                      <span className="font-semibold text-gray-900 dark:text-gray-100">
-                        {Math.min(endIndex, filteredApplications.length)}
-                      </span>{' '}
-                      / <span className="font-semibold text-gray-900 dark:text-gray-100">{filteredApplications.length}</span> müraciət
-                    </div>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
-                        disabled={currentPage === 1}
-                        className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-                      >
-                        ← Əvvəlki
-                      </button>
-                      <div className="flex gap-1">
-                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                          <button
-                            key={page}
-                            onClick={() => setCurrentPage(page)}
-                            className={`px-4 py-2 rounded-lg font-semibold transition-all duration-200 ${
-                              currentPage === page
-                                ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-md'
-                                : 'bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700'
-                            }`}
-                          >
-                            {page}
-                          </button>
-                        ))}
-                      </div>
-                      <button
-                        onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
-                        disabled={currentPage === totalPages}
-                        className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-                      >
-                        Növbəti →
-                      </button>
-                    </div>
-                  </div>
+                          </div>
+                          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                            <div
+                              className="bg-emerald-600 h-2 rounded-full"
+                              style={{ width: `${percentage}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      )
+                    })}
                 </div>
-              )}
-            </>
-          )}
-        </div>
+              </div>
 
-        {/* Footer Stats */}
-        {filteredApplications.length > 0 && (
-          <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4 animate-fadeIn">
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
-              <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Orta Maaş</div>
-              <div className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">
-                {Math.round(
-                  filteredApplications.reduce((sum, app) => sum + app.expected_salary, 0) /
-                    filteredApplications.length
-                )}{' '}
-                AZN
-              </div>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
-              <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Ən Populyar Vəzifə</div>
-              <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 truncate">
-                {Object.entries(
-                  filteredApplications.reduce((acc, app) => {
-                    acc[app.job_title] = (acc[app.job_title] || 0) + 1
-                    return acc
-                  }, {} as Record<string, number>)
-                ).sort((a, b) => b[1] - a[1])[0]?.[0] || '-'}
-              </div>
-            </div>
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-100 dark:border-gray-700">
-              <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Ən Çox Tələb Olunan Məkan</div>
-              <div className="text-2xl font-bold text-teal-600 dark:text-teal-400 truncate">
-                {Object.entries(
-                  filteredApplications.reduce((acc, app) => {
-                    acc[app.place_to_work] = (acc[app.place_to_work] || 0) + 1
-                    return acc
-                  }, {} as Record<string, number>)
-                ).sort((a, b) => b[1] - a[1])[0]?.[0] || '-'}
+              <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                  Məkanlara görə (Top 10)
+                </h3>
+                <div className="space-y-3">
+                  {Object.entries(
+                    applications.reduce((acc, app) => {
+                      acc[app.place_to_work] = (acc[app.place_to_work] || 0) + 1
+                      return acc
+                    }, {} as Record<string, number>)
+                  )
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 10)
+                    .map(([location, count]) => {
+                      const percentage = (count / applications.length) * 100
+                      return (
+                        <div key={location}>
+                          <div className="flex justify-between mb-1">
+                            <span className="text-sm text-gray-700 dark:text-gray-300">{location}</span>
+                            <span className="text-sm font-medium text-gray-900 dark:text-white">
+                              {count} ({percentage.toFixed(1)}%)
+                            </span>
+                          </div>
+                          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                            <div
+                              className="bg-blue-600 h-2 rounded-full"
+                              style={{ width: `${percentage}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      )
+                    })}
+                </div>
               </div>
             </div>
           </div>
         )}
-        </>
-        )}
-      </div>
+      </main>
     </div>
   )
 }
