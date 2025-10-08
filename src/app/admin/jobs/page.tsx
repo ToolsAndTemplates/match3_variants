@@ -155,7 +155,7 @@ export default function JobsManagementPage() {
           text: text,
           url: url,
         })
-      } catch (err) {
+      } catch {
         console.log('Share cancelled')
       }
     } else {
