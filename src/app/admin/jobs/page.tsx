@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { QRCodeSVG } from 'qrcode.react'
 
 interface Job {
   id: number
@@ -26,6 +27,7 @@ export default function JobsManagementPage() {
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [editingJob, setEditingJob] = useState<Job | null>(null)
+  const [qrModalJob, setQrModalJob] = useState<Job | null>(null)
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -129,6 +131,55 @@ export default function JobsManagementPage() {
     })
     setEditingJob(null)
     setShowForm(false)
+  }
+
+  const getJobUrl = (jobId: number) => {
+    if (typeof window !== 'undefined') {
+      return `${window.location.origin}/?job=${jobId}`
+    }
+    return ''
+  }
+
+  const handleCopyLink = (jobId: number) => {
+    const url = getJobUrl(jobId)
+    navigator.clipboard.writeText(url)
+    alert('Link kopyalandı!')
+  }
+
+  const handleShare = async (job: Job) => {
+    const url = getJobUrl(job.id)
+    const text = `${job.title} - ${job.location}`
+
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: job.title,
+          text: text,
+          url: url,
+        })
+      } catch (err) {
+        console.log('Share cancelled')
+      }
+    } else {
+      handleCopyLink(job.id)
+    }
+  }
+
+  const handleDownloadQR = (jobId: number) => {
+    const canvas = document.getElementById(`qr-${jobId}`) as HTMLElement
+    const svg = canvas?.querySelector('svg')
+    if (svg) {
+      const svgData = new XMLSerializer().serializeToString(svg)
+      const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' })
+      const svgUrl = URL.createObjectURL(svgBlob)
+      const downloadLink = document.createElement('a')
+      downloadLink.href = svgUrl
+      downloadLink.download = `vakansiya-${jobId}-qr.svg`
+      document.body.appendChild(downloadLink)
+      downloadLink.click()
+      document.body.removeChild(downloadLink)
+      URL.revokeObjectURL(svgUrl)
+    }
   }
 
   if (loading) {
@@ -386,18 +437,44 @@ export default function JobsManagementPage() {
                     {job.description}
                   </p>
                 </div>
-                <div className="flex gap-2 ml-auto">
+                <div className="flex flex-wrap gap-2 ml-auto">
+                  <button
+                    onClick={() => setQrModalJob(job)}
+                    className="bg-purple-50 hover:bg-purple-100 text-purple-700 font-medium py-2 px-3 rounded-lg transition-all flex items-center gap-1"
+                    title="QR Kod"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                    </svg>
+                    QR
+                  </button>
+                  <button
+                    onClick={() => handleShare(job)}
+                    className="bg-green-50 hover:bg-green-100 text-green-700 font-medium py-2 px-3 rounded-lg transition-all flex items-center gap-1"
+                    title="Paylaş"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+                    </svg>
+                    Paylaş
+                  </button>
                   <button
                     onClick={() => handleEdit(job)}
-                    className="bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium py-2 px-4 rounded-lg transition-all"
+                    className="bg-blue-50 hover:bg-blue-100 text-blue-700 font-medium py-2 px-3 rounded-lg transition-all flex items-center gap-1"
                   >
-                    ✏️ Redaktə
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                    Redaktə
                   </button>
                   <button
                     onClick={() => handleDelete(job.id)}
-                    className="bg-red-50 hover:bg-red-100 text-red-700 font-medium py-2 px-4 rounded-lg transition-all"
+                    className="bg-red-50 hover:bg-red-100 text-red-700 font-medium py-2 px-3 rounded-lg transition-all flex items-center gap-1"
                   >
-                    🗑️ Sil
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    Sil
                   </button>
                 </div>
               </div>
@@ -430,6 +507,71 @@ export default function JobsManagementPage() {
           </div>
         )}
       </div>
+
+      {/* QR Code Modal */}
+      {qrModalJob && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={() => setQrModalJob(null)}>
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-purple-100 flex items-center justify-center">
+                  <svg className="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-bold text-gray-900">QR Kod</h3>
+              </div>
+              <button
+                onClick={() => setQrModalJob(null)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+
+            <div className="mb-6">
+              <h4 className="font-semibold text-gray-900 mb-1">{qrModalJob.title}</h4>
+              <p className="text-sm text-gray-600">{qrModalJob.location}</p>
+            </div>
+
+            <div className="bg-gray-50 rounded-xl p-6 mb-6 flex justify-center" id={`qr-${qrModalJob.id}`}>
+              <QRCodeSVG
+                value={getJobUrl(qrModalJob.id)}
+                size={200}
+                level="H"
+                includeMargin={true}
+              />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={() => handleDownloadQR(qrModalJob.id)}
+                className="w-full bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white font-semibold py-2.5 px-4 rounded-lg transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                QR Kodu Yüklə
+              </button>
+              <button
+                onClick={() => handleCopyLink(qrModalJob.id)}
+                className="w-full bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 font-medium py-2.5 px-4 rounded-lg transition-all flex items-center justify-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                </svg>
+                Linki Kopyala
+              </button>
+            </div>
+
+            <div className="mt-4 p-3 bg-blue-50 rounded-lg">
+              <p className="text-xs text-blue-800 break-all">{getJobUrl(qrModalJob.id)}</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

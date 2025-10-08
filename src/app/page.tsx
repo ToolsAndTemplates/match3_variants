@@ -34,7 +34,30 @@ export default function Home() {
 
   useEffect(() => {
     fetchJobs()
-  }, [])
+
+    // Check for job parameter in URL
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search)
+      const jobId = params.get('job')
+      if (jobId) {
+        // Wait for jobs to load then select the job
+        const checkJobs = setInterval(() => {
+          if (jobs.length > 0) {
+            const job = jobs.find(j => j.id === parseInt(jobId))
+            if (job) {
+              setSelectedJob(job)
+              // Scroll to top smoothly
+              window.scrollTo({ top: 0, behavior: 'smooth' })
+            }
+            clearInterval(checkJobs)
+          }
+        }, 100)
+
+        // Clear interval after 5 seconds to prevent memory leak
+        setTimeout(() => clearInterval(checkJobs), 5000)
+      }
+    }
+  }, [jobs.length])
 
   const fetchJobs = async () => {
     try {
