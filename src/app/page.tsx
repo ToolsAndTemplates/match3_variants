@@ -140,11 +140,11 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
+      <header className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Bizim Oba</h1>
+          <h1 className="text-2xl font-bold text-gray-900">Bizim Oba</h1>
         </div>
       </header>
 
@@ -153,61 +153,61 @@ export default function Home() {
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Hero */}
           <div className="text-center mb-12">
-            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
               Karyeranıza Başlayın
             </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-400 mb-2">
+            <p className="text-xl text-gray-600 mb-2">
               Azərbaycanın ən böyük supermarket şəbəkəsində
             </p>
-            <p className="text-gray-500 dark:text-gray-500">
+            <p className="text-gray-500">
               1,610+ mağaza • {jobs.length} aktiv vakansiya
             </p>
           </div>
 
           {/* Stats Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 text-center border border-gray-200 dark:border-gray-700">
-              <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">1,610+</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Mağaza</div>
+            <div className="bg-orange-50 rounded-lg p-6 text-center border border-orange-200">
+              <div className="text-3xl font-bold text-orange-600 mb-1">1,610+</div>
+              <div className="text-sm text-gray-600">Mağaza</div>
             </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 text-center border border-gray-200 dark:border-gray-700">
-              <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{jobs.length}</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Vakansiya</div>
+            <div className="bg-blue-50 rounded-lg p-6 text-center border border-blue-200">
+              <div className="text-3xl font-bold text-blue-600 mb-1">{jobs.length}</div>
+              <div className="text-sm text-gray-600">Vakansiya</div>
             </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 text-center border border-gray-200 dark:border-gray-700">
-              <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">24h</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Cavab</div>
+            <div className="bg-purple-50 rounded-lg p-6 text-center border border-purple-200">
+              <div className="text-3xl font-bold text-purple-600 mb-1">24h</div>
+              <div className="text-sm text-gray-600">Cavab</div>
             </div>
-            <div className="bg-white dark:bg-gray-800 rounded-lg p-6 text-center border border-gray-200 dark:border-gray-700">
-              <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">5,000+</div>
-              <div className="text-sm text-gray-600 dark:text-gray-400">Əməkdaş</div>
+            <div className="bg-green-50 rounded-lg p-6 text-center border border-green-200">
+              <div className="text-3xl font-bold text-green-600 mb-1">5,000+</div>
+              <div className="text-sm text-gray-600">Əməkdaş</div>
             </div>
           </div>
 
           {/* Job Listings */}
           <div>
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Açıq Vakansiyalar</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-6">Açıq Vakansiyalar</h3>
 
             {loading ? (
               <div className="grid gap-4">
                 {[1, 2, 3].map((i) => (
                   <div
                     key={i}
-                    className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 animate-pulse"
+                    className="bg-gray-50 rounded-lg p-6 border border-gray-200 animate-pulse"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
-                        <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-3"></div>
+                        <div className="h-6 bg-gray-200 rounded w-3/4 mb-3"></div>
                         <div className="flex flex-wrap gap-2 mb-2">
-                          <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
-                          <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-32"></div>
-                          <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-20"></div>
+                          <div className="h-5 bg-gray-200 rounded w-24"></div>
+                          <div className="h-5 bg-gray-200 rounded w-32"></div>
+                          <div className="h-5 bg-gray-200 rounded w-20"></div>
                         </div>
                       </div>
-                      <div className="w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                      <div className="w-6 h-6 bg-gray-200 rounded"></div>
                     </div>
-                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
-                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6"></div>
+                    <div className="h-4 bg-gray-200 rounded w-full mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded w-5/6"></div>
                   </div>
                 ))}
               </div>
@@ -217,15 +217,15 @@ export default function Home() {
                   <div
                     key={job.id}
                     onClick={() => handleJobSelect(job)}
-                    className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 hover:border-emerald-500 dark:hover:border-emerald-500 hover:shadow-md transition-all cursor-pointer group"
+                    className="bg-gray-50 rounded-lg p-6 border border-gray-200 hover:border-orange-500 hover:shadow-lg transition-all cursor-pointer group"
                   >
                     <div className="flex items-start justify-between mb-3">
                       <div>
-                        <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-500 transition-colors">
+                        <h4 className="text-xl font-semibold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors">
                           {job.title}
                         </h4>
                         <div className="flex flex-wrap gap-2">
-                          <span className="inline-flex items-center text-sm text-gray-600 dark:text-gray-400">
+                          <span className="inline-flex items-center text-sm text-gray-600">
                             <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -233,14 +233,14 @@ export default function Home() {
                             {job.location}
                           </span>
                           {job.salary_min && job.salary_max && (
-                            <span className="inline-flex items-center text-sm text-gray-600 dark:text-gray-400">
+                            <span className="inline-flex items-center text-sm text-gray-600">
                               <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                               </svg>
                               {job.salary_min}-{job.salary_max} AZN
                             </span>
                           )}
-                          <span className="inline-flex items-center text-sm text-gray-600 dark:text-gray-400">
+                          <span className="inline-flex items-center text-sm text-gray-600">
                             <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
@@ -248,25 +248,25 @@ export default function Home() {
                           </span>
                         </div>
                       </div>
-                      <svg className="w-6 h-6 text-gray-400 group-hover:text-emerald-500 transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-6 h-6 text-gray-400 group-hover:text-orange-500 transition-colors flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                       </svg>
                     </div>
-                    <p className="text-gray-600 dark:text-gray-400 line-clamp-2">
+                    <p className="text-gray-600 line-clamp-2">
                       {job.description}
                     </p>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="text-center py-16 bg-gray-50 rounded-lg border border-gray-200">
                 <svg className="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                 </svg>
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
                   Aktiv vakansiya yoxdur
                 </h3>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="text-gray-600">
                   Yeni vakansiyalar tezliklə əlavə ediləcək
                 </p>
               </div>
@@ -278,7 +278,7 @@ export default function Home() {
         <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <button
             onClick={() => setSelectedJob(null)}
-            className="inline-flex items-center text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-6 transition-colors"
+            className="inline-flex items-center text-gray-600 hover:text-orange-600 mb-6 transition-colors"
           >
             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -286,11 +286,11 @@ export default function Home() {
             Geri
           </button>
 
-          <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div className="bg-white rounded-lg border border-gray-200 overflow-hidden shadow-lg">
             {/* Job Header */}
-            <div className="bg-emerald-600 dark:bg-emerald-700 px-6 py-8 text-white">
+            <div className="bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-8 text-white">
               <h2 className="text-2xl font-bold mb-2">{selectedJob.title}</h2>
-              <div className="flex flex-wrap gap-3 text-emerald-100">
+              <div className="flex flex-wrap gap-3 text-orange-100">
                 <span className="inline-flex items-center">
                   <svg className="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -313,7 +313,7 @@ export default function Home() {
             <form onSubmit={handleSubmit} className="p-6 space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
                     Ad *
                   </label>
                   <input
@@ -322,13 +322,13 @@ export default function Home() {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
                     placeholder="Ayşə"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="surname" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label htmlFor="surname" className="block text-sm font-medium text-gray-700 mb-2">
                     Soyad *
                   </label>
                   <input
@@ -337,13 +337,13 @@ export default function Home() {
                     value={formData.surname}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
                     placeholder="Məmmədova"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
                     Telefon *
                   </label>
                   <input
@@ -352,13 +352,13 @@ export default function Home() {
                     value={formData.phone}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
                     placeholder="+994 50 555 55 55"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                     Email
                   </label>
                   <input
@@ -366,14 +366,14 @@ export default function Home() {
                     id="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
                     placeholder="email@example.com"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="currentLivingPlace" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label htmlFor="currentLivingPlace" className="block text-sm font-medium text-gray-700 mb-2">
                   Hazırki yaşayış yeri *
                 </label>
                 <input
@@ -382,13 +382,13 @@ export default function Home() {
                   value={formData.currentLivingPlace}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
                   placeholder="Bakı, Azərbaycan"
                 />
               </div>
 
               <div>
-                <label htmlFor="expectedSalary" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label htmlFor="expectedSalary" className="block text-sm font-medium text-gray-700 mb-2">
                   Gözlənilən maaş (AZN) *
                 </label>
                 <input
@@ -397,13 +397,13 @@ export default function Home() {
                   value={formData.expectedSalary}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
                   placeholder="500"
                 />
               </div>
 
               <div>
-                <label htmlFor="cv" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label htmlFor="cv" className="block text-sm font-medium text-gray-700 mb-2">
                   CV (PDF, DOC, DOCX)
                 </label>
                 <input
@@ -411,17 +411,17 @@ export default function Home() {
                   id="cv"
                   accept=".pdf,.doc,.docx"
                   onChange={handleCvChange}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
                 />
                 {cvFile && (
-                  <p className="mt-2 text-sm text-emerald-600 dark:text-emerald-500">
+                  <p className="mt-2 text-sm text-orange-600">
                     ✓ {cvFile.name}
                   </p>
                 )}
               </div>
 
               <div>
-                <label htmlFor="info" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                <label htmlFor="info" className="block text-sm font-medium text-gray-700 mb-2">
                   Əlavə məlumat
                 </label>
                 <textarea
@@ -429,7 +429,7 @@ export default function Home() {
                   value={formData.info}
                   onChange={handleChange}
                   rows={4}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent dark:bg-gray-700 dark:text-white transition-colors resize-none"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors resize-none"
                   placeholder="Özünüz haqqında məlumat..."
                 />
               </div>
@@ -437,7 +437,7 @@ export default function Home() {
               <button
                 type="submit"
                 disabled={uploading || submitting}
-                className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:bg-gray-400 text-white font-medium py-3 px-6 rounded-lg transition-colors disabled:cursor-not-allowed"
+                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:bg-gray-400 text-white font-medium py-3 px-6 rounded-lg transition-colors disabled:cursor-not-allowed shadow-lg"
               >
                 {uploading ? 'CV yüklənir...' : submitting ? 'Göndərilir...' : 'Müraciəti Göndər'}
               </button>
@@ -449,18 +449,18 @@ export default function Home() {
       {/* Success Modal */}
       {showSuccess && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-8 max-w-md w-full text-center">
-            <div className="w-16 h-16 bg-emerald-100 dark:bg-emerald-900 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-emerald-600 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full text-center shadow-2xl">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Təbriklər!</h3>
-            <p className="text-gray-600 dark:text-gray-400 mb-6">
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">Təbriklər!</h3>
+            <p className="text-gray-600 mb-6">
               Müraciətiniz uğurla göndərildi. Tezliklə sizinlə əlaqə saxlayacağıq.
             </p>
-            <div className="h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
-              <div className="h-full bg-emerald-600 animate-progress"></div>
+            <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
+              <div className="h-full bg-green-600 animate-progress"></div>
             </div>
           </div>
         </div>
