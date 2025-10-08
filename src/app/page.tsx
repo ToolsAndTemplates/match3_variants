@@ -602,19 +602,42 @@ export default function Home() {
                 </div>
 
                 {!showMapView ? (
-                  <select
-                    id="placeToWork"
-                    value={formData.placeToWork}
-                    onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
-                  >
-                    <option value="">Seçin (ixtiyari)</option>
-                    {branchLocations.map((location) => (
-                      <option key={location} value={location}>
-                        {location}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="space-y-2">
+                    <select
+                      id="placeToWork"
+                      value={formData.placeToWork}
+                      onChange={handleChange}
+                      className={`w-full px-4 py-2 border-2 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-all ${
+                        formData.placeToWork
+                          ? 'border-orange-500 bg-orange-50 text-orange-900 font-semibold'
+                          : 'border-gray-300 bg-white text-gray-900'
+                      }`}
+                    >
+                      <option value="">Seçin (ixtiyari)</option>
+                      {branchLocations.map((location) => (
+                        <option key={location} value={location}>
+                          {location}
+                        </option>
+                      ))}
+                    </select>
+                    {formData.placeToWork && (
+                      <div className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-lg text-sm font-semibold shadow-md">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        </svg>
+                        Seçilmiş filial: {formData.placeToWork}
+                        <button
+                          type="button"
+                          onClick={() => setFormData({ ...formData, placeToWork: '' })}
+                          className="ml-auto hover:bg-white/20 rounded-full p-1 transition-colors"
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                          </svg>
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 ) : (
                   <div className="space-y-4">
                     {formData.placeToWork && (
