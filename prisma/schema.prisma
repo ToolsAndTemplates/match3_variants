@@ -43,7 +43,6 @@ model job_applications {
   email                String?
   current_living_place String
   place_to_work        String
-  job_title            String
   expected_salary      Int
   cv_url               String?
   info                 String?

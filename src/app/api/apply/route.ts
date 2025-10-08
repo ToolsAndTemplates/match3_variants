@@ -19,7 +19,6 @@ export async function POST(request: Request) {
         email: formData.email || null,
         current_living_place: formData.currentLivingPlace,
         place_to_work: formData.placeToWork,
-        job_title: formData.jobTitle,
         expected_salary: isNaN(expectedSalary) ? 0 : expectedSalary,
         cv_url: formData.cvUrl || null,
         info: formData.info,

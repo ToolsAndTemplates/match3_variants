@@ -12,7 +12,6 @@ interface Application {
   email: string | null
   current_living_place: string
   place_to_work: string
-  job_title: string
   expected_salary: number
   cv_url: string | null
   info: string | null
@@ -109,8 +108,7 @@ export default function AdminPage() {
       Email: app.email || '',
       'Hazırki yaşayış yeri': app.current_living_place,
       'İş yeri': app.place_to_work,
-      'Vakansiya': app.job?.title || 'Ümumi',
-      'Vəzifə': app.job_title,
+      'Vəzifə': app.job?.title || 'Ümumi',
       'Gözlənilən maaş (AZN)': app.expected_salary,
       'CV URL': app.cv_url || '',
       'Əlavə məlumat': app.info || '',
@@ -120,7 +118,7 @@ export default function AdminPage() {
     const ws = XLSX.utils.json_to_sheet(exportData)
     ws['!cols'] = [
       { wch: 5 }, { wch: 15 }, { wch: 15 }, { wch: 15 }, { wch: 25 },
-      { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 15 }, { wch: 12 },
+      { wch: 20 }, { wch: 20 }, { wch: 20 }, { wch: 12 },
       { wch: 50 }, { wch: 30 }, { wch: 20 },
     ]
 
@@ -135,7 +133,7 @@ export default function AdminPage() {
       app.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       app.surname.toLowerCase().includes(searchTerm.toLowerCase()) ||
       app.phone.includes(searchTerm) ||
-      app.job_title.toLowerCase().includes(searchTerm.toLowerCase())
+      (app.job?.title || '').toLowerCase().includes(searchTerm.toLowerCase())
 
     const matchesLocation = filterLocation === '' || app.place_to_work === filterLocation
 
@@ -310,12 +308,12 @@ export default function AdminPage() {
             >
               Vakansiyalar
             </button>
-            <a
-              href="/"
+            <button
+              onClick={() => window.location.href = '/'}
               className="pb-3 px-1 font-medium transition-colors border-b-2 border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
             >
               Ana Səhifə
-            </a>
+            </button>
           </div>
         </div>
       </header>
@@ -503,7 +501,7 @@ export default function AdminPage() {
               <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6">
                 <div className="text-sm text-gray-600 dark:text-gray-400 mb-1">Vəzifələr</div>
                 <div className="text-3xl font-bold text-gray-900 dark:text-white">
-                  {new Set(applications.map(app => app.job_title)).size}
+                  {new Set(applications.map(app => app.job?.title || 'Ümumi')).size}
                 </div>
               </div>
             </div>
@@ -517,7 +515,8 @@ export default function AdminPage() {
                 <div className="space-y-3">
                   {Object.entries(
                     applications.reduce((acc, app) => {
-                      acc[app.job_title] = (acc[app.job_title] || 0) + 1
+                      const title = app.job?.title || 'Ümumi'
+                      acc[title] = (acc[title] || 0) + 1
                       return acc
                     }, {} as Record<string, number>)
                   )

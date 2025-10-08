@@ -94,7 +94,6 @@ export default function Home() {
         body: JSON.stringify({
           ...formData,
           jobId: selectedJob?.id,
-          jobTitle: selectedJob?.title || '',
           placeToWork: selectedJob?.location || '',
           cvUrl,
         }),
