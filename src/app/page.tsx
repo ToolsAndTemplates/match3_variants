@@ -16,6 +16,7 @@ interface Job {
 
 export default function Home() {
   const [jobs, setJobs] = useState<Job[]>([])
+  const [loading, setLoading] = useState(true)
   const [selectedJob, setSelectedJob] = useState<Job | null>(null)
   const [formData, setFormData] = useState({
     name: '',
@@ -37,6 +38,7 @@ export default function Home() {
 
   const fetchJobs = async () => {
     try {
+      setLoading(true)
       const response = await fetch('/api/jobs?active=true', {
         method: 'GET',
         headers: {
@@ -48,6 +50,8 @@ export default function Home() {
       setJobs(data)
     } catch (error) {
       console.error('Error fetching jobs:', error)
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -140,15 +144,7 @@ export default function Home() {
       {/* Header */}
       <header className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Bizim Oba</h1>
-            <a
-              href="/admin"
-              className="text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors"
-            >
-              Admin Panel
-            </a>
-          </div>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Bizim Oba</h1>
         </div>
       </header>
 
@@ -192,7 +188,12 @@ export default function Home() {
           <div>
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Açıq Vakansiyalar</h3>
 
-            {jobs.length > 0 ? (
+            {loading ? (
+              <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                <div className="inline-block w-12 h-12 border-4 border-gray-300 border-t-emerald-600 rounded-full animate-spin mb-4"></div>
+                <p className="text-gray-600 dark:text-gray-400">Vakansiyalar yüklənir...</p>
+              </div>
+            ) : jobs.length > 0 ? (
               <div className="grid gap-4">
                 {jobs.map((job) => (
                   <div
