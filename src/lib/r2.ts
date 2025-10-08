@@ -1,9 +1,18 @@
 import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 
+// Support both R2_API and R2_API_ENDPOINT for endpoint configuration
+const endpoint = process.env.R2_API_ENDPOINT || `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`
+
+// Support both R2_BUCKET_NAME and R2_BUCKET
+const bucketName = process.env.R2_BUCKET_NAME || process.env.R2_BUCKET || ''
+
+// Support both R2_PUBLIC_URL and R2_API for public URLs
+const publicUrl = process.env.R2_PUBLIC_URL || process.env.R2_API || `${endpoint}/${bucketName}`
+
 const r2Client = new S3Client({
   region: 'auto',
-  endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+  endpoint,
   credentials: {
     accessKeyId: process.env.R2_ACCESS_KEY_ID || '',
     secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || '',
@@ -19,7 +28,7 @@ export async function uploadToR2(
 
   await r2Client.send(
     new PutObjectCommand({
-      Bucket: process.env.R2_BUCKET_NAME,
+      Bucket: bucketName,
       Key: key,
       Body: file,
       ContentType: contentType,
@@ -27,15 +36,15 @@ export async function uploadToR2(
   )
 
   // Return public URL
-  return `${process.env.R2_PUBLIC_URL}/${key}`
+  return `${publicUrl}/${key}`
 }
 
 export async function getSignedDownloadUrl(fileUrl: string): Promise<string> {
-  // Extract key from URL
-  const key = fileUrl.replace(`${process.env.R2_PUBLIC_URL}/`, '')
+  // Extract key from URL (remove the base URL part)
+  const key = fileUrl.replace(`${publicUrl}/`, '').replace(publicUrl, '')
 
   const command = new GetObjectCommand({
-    Bucket: process.env.R2_BUCKET_NAME,
+    Bucket: bucketName,
     Key: key,
   })
 
