@@ -189,9 +189,27 @@ export default function Home() {
             <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Açıq Vakansiyalar</h3>
 
             {loading ? (
-              <div className="text-center py-16 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
-                <div className="inline-block w-12 h-12 border-4 border-gray-300 border-t-emerald-600 rounded-full animate-spin mb-4"></div>
-                <p className="text-gray-600 dark:text-gray-400">Vakansiyalar yüklənir...</p>
+              <div className="grid gap-4">
+                {[1, 2, 3].map((i) => (
+                  <div
+                    key={i}
+                    className="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 animate-pulse"
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-3"></div>
+                        <div className="flex flex-wrap gap-2 mb-2">
+                          <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-24"></div>
+                          <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-32"></div>
+                          <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-20"></div>
+                        </div>
+                      </div>
+                      <div className="w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                    </div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6"></div>
+                  </div>
+                ))}
               </div>
             ) : jobs.length > 0 ? (
               <div className="grid gap-4">
