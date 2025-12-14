@@ -1,0 +1,24 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Gem icon with gradient -->
+  <defs>
+    <linearGradient id="gemGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#a855f7;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ec4899;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f97316;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Outer glow -->
+  <circle cx="16" cy="16" r="15" fill="url(#gemGradient)" opacity="0.3"/>
+
+  <!-- Main gem shape -->
+  <path d="M16 4 L24 12 L20 26 L12 26 L8 12 Z"
+        fill="url(#gemGradient)"
+        stroke="#fff"
+        stroke-width="1"/>
+
+  <!-- Shine effect -->
+  <path d="M14 8 L18 8 L16 14 Z"
+        fill="#fff"
+        opacity="0.6"/>
+</svg>
