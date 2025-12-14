@@ -36,6 +36,8 @@ export default function GameBoard() {
   const [animatingMatches, setAnimatingMatches] = useState<Position[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const [cellSize, setCellSize] = useState(CELL_SIZE);
+  const [invalidMove, setInvalidMove] = useState<Position | null>(null);
+  const [feedbackMessage, setFeedbackMessage] = useState<string>('');
 
   // Load high score on mount
   useEffect(() => {
@@ -159,6 +161,8 @@ export default function GameBoard() {
       if (!gameState.selectedGem) {
         // First selection
         setGameState(prev => ({ ...prev, selectedGem: clickedPos }));
+        setFeedbackMessage('Now tap an adjacent gem to swap!');
+        setTimeout(() => setFeedbackMessage(''), 2000);
       } else {
         // Second selection
         const { selectedGem } = gameState;
@@ -166,12 +170,14 @@ export default function GameBoard() {
         if (selectedGem.row === row && selectedGem.col === col) {
           // Deselect
           setGameState(prev => ({ ...prev, selectedGem: null }));
+          setFeedbackMessage('');
           return;
         }
 
         if (areAdjacent(selectedGem, clickedPos)) {
           // Valid swap
           setGameState(prev => ({ ...prev, isProcessing: true, selectedGem: null }));
+          setFeedbackMessage('');
 
           const swappedBoard = swapGems(gameState.board, selectedGem, clickedPos);
           const matches = findMatches(swappedBoard);
@@ -192,12 +198,23 @@ export default function GameBoard() {
             processMatches(swappedBoard, 0);
           } else {
             // Invalid move - swap back
+            setInvalidMove(clickedPos);
+            setFeedbackMessage('❌ This swap doesn\'t create a match!');
             setTimeout(() => {
+              setInvalidMove(null);
+              setFeedbackMessage('');
               setGameState(prev => ({ ...prev, isProcessing: false }));
-            }, 300);
+            }, 800);
           }
         } else {
-          // Not adjacent - select new gem
+          // Not adjacent - show feedback
+          setInvalidMove(clickedPos);
+          setFeedbackMessage('⚠️ Gems must be next to each other (adjacent)!');
+          setTimeout(() => {
+            setInvalidMove(null);
+            setFeedbackMessage('');
+          }, 800);
+          // Select the new gem
           setGameState(prev => ({ ...prev, selectedGem: clickedPos }));
         }
       }
@@ -263,6 +280,15 @@ export default function GameBoard() {
           </div>
         </div>
 
+        {/* Feedback Message */}
+        {feedbackMessage && (
+          <div className="text-center mb-4 min-h-[48px] flex items-center justify-center">
+            <span className="inline-block bg-blue-600/90 backdrop-blur-sm text-white px-6 py-3 rounded-full font-bold text-sm sm:text-base shadow-lg border-2 border-blue-400/50 animate-pulse">
+              {feedbackMessage}
+            </span>
+          </div>
+        )}
+
         {/* Combo indicator */}
         {gameState.combo > 0 && (
           <div className="text-center mb-4">
@@ -300,12 +326,17 @@ export default function GameBoard() {
                 pos => pos.row === rowIndex && pos.col === colIndex
               );
 
+              const isInvalid =
+                invalidMove?.row === rowIndex &&
+                invalidMove?.col === colIndex;
+
               return (
                 <Gem
                   key={`${gem.id}-${rowIndex}-${colIndex}`}
                   type={gem.type}
                   isSelected={isSelected}
                   isMatched={isMatched}
+                  isInvalid={isInvalid}
                   onClick={() => handleGemClick(rowIndex, colIndex)}
                   size={cellSize}
                 />

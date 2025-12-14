@@ -6,6 +6,7 @@ interface GemProps {
   type: GemType;
   isSelected: boolean;
   isMatched?: boolean;
+  isInvalid?: boolean;
   onClick: () => void;
   size: number;
 }
@@ -52,7 +53,7 @@ const GEM_SHAPES: Record<GemType, string> = {
   orange: '♦',
 };
 
-export default function Gem({ type, isSelected, isMatched, onClick, size }: GemProps) {
+export default function Gem({ type, isSelected, isMatched, isInvalid, onClick, size }: GemProps) {
   const colors = GEM_COLORS[type];
   const shape = GEM_SHAPES[type];
 
@@ -63,6 +64,7 @@ export default function Gem({ type, isSelected, isMatched, onClick, size }: GemP
         relative transition-all duration-200 rounded-lg
         ${isMatched ? 'animate-pop opacity-0' : 'opacity-100'}
         ${isSelected ? 'scale-110 ring-4 ring-white' : 'scale-100'}
+        ${isInvalid ? 'animate-shake ring-4 ring-red-500' : ''}
         hover:scale-105 active:scale-95
         bg-gradient-to-br ${colors.gradient}
         shadow-lg ${colors.shadow}

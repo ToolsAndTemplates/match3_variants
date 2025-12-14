@@ -16,6 +16,8 @@ const config: Config = {
         'pop': 'pop 0.3s ease-out',
         'fall': 'fall 0.4s ease-in',
         'pulse-gem': 'pulse-gem 0.6s ease-in-out infinite',
+        'shake': 'shake 0.4s ease-in-out',
+        'hint': 'hint 2s ease-in-out infinite',
       },
       keyframes: {
         pop: {
@@ -30,6 +32,15 @@ const config: Config = {
         'pulse-gem': {
           '0%, 100%': { transform: 'scale(1)', filter: 'brightness(1)' },
           '50%': { transform: 'scale(1.1)', filter: 'brightness(1.3)' },
+        },
+        shake: {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '25%': { transform: 'translateX(-5px)' },
+          '75%': { transform: 'translateX(5px)' },
+        },
+        hint: {
+          '0%, 100%': { transform: 'scale(1)', boxShadow: '0 0 0 0 rgba(255, 255, 255, 0.5)' },
+          '50%': { transform: 'scale(1.05)', boxShadow: '0 0 0 8px rgba(255, 255, 255, 0)' },
         },
       },
     },
