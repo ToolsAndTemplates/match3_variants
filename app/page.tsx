@@ -7,17 +7,20 @@ const Leaderboard = dynamic(() => import('@/components/Leaderboard'), { ssr: fal
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start py-8 px-4 bg-gradient-to-b from-gray-900 via-purple-900/20 to-gray-900">
-      <GameBoard />
-      <div className="mt-8 w-full flex justify-center">
-        <Leaderboard />
-      </div>
+    <main className="min-h-screen bg-gradient-to-b from-gray-900 via-purple-900/20 to-gray-900">
+      <div className="container mx-auto px-4 py-6 sm:py-8 md:py-12 flex flex-col items-center gap-8">
+        <GameBoard />
 
-      {/* Footer */}
-      <footer className="mt-12 text-center text-gray-500 text-sm">
-        <p>Built with Next.js & TypeScript</p>
-        <p className="mt-1">Match 3 or more gems to score points!</p>
-      </footer>
+        <div className="w-full flex justify-center">
+          <Leaderboard />
+        </div>
+
+        {/* Footer */}
+        <footer className="text-center text-gray-500 text-sm sm:text-base pb-6">
+          <p className="font-semibold">Built with Next.js & TypeScript</p>
+          <p className="mt-2 text-gray-600">Challenge yourself and beat the high score!</p>
+        </footer>
+      </div>
     </main>
   );
 }

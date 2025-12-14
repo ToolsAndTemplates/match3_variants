@@ -35,6 +35,17 @@ body {
   textarea {
     font-size: 16px;
   }
+
+  /* Smooth scrolling on mobile */
+  html {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Better touch targets */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
 
 /* Disable text selection on game board */

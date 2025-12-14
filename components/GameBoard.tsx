@@ -46,10 +46,11 @@ export default function GameBoard() {
   useEffect(() => {
     const updateCellSize = () => {
       const screenWidth = window.innerWidth;
-      const padding = 32; // Total horizontal padding
+      const padding = 48; // Total horizontal padding (increased for better margins)
       const maxBoardWidth = screenWidth - padding;
       const calculatedSize = Math.floor(maxBoardWidth / BOARD_SIZE);
-      const finalSize = Math.min(calculatedSize, 60); // Max 60px per cell
+      // Min 35px for very small screens, max 70px for larger screens
+      const finalSize = Math.max(35, Math.min(calculatedSize, 70));
       setCellSize(finalSize);
     };
 
@@ -220,33 +221,33 @@ export default function GameBoard() {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4 p-4 min-h-screen">
+    <div className="flex flex-col items-center gap-4 w-full max-w-4xl mx-auto">
       {/* Header */}
-      <div className="w-full max-w-2xl">
-        <h1 className="text-3xl md:text-4xl font-bold text-center mb-2 bg-gradient-to-r from-purple-400 to-pink-600 text-transparent bg-clip-text">
+      <div className="w-full">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-4 bg-gradient-to-r from-purple-400 via-pink-500 to-pink-600 text-transparent bg-clip-text">
           Match-3 Puzzle
         </h1>
 
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-4">
-          <div className="bg-gray-800 rounded-lg p-3 text-center">
-            <div className="text-gray-400 text-xs md:text-sm">Score</div>
-            <div className="text-xl md:text-2xl font-bold text-yellow-400">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
+          <div className="bg-gray-800/80 backdrop-blur-sm rounded-xl p-4 text-center shadow-lg border border-gray-700/50">
+            <div className="text-gray-400 text-xs sm:text-sm font-medium mb-1">Score</div>
+            <div className="text-2xl sm:text-3xl font-bold text-yellow-400">
               {gameState.score.toLocaleString()}
             </div>
           </div>
 
-          <div className="bg-gray-800 rounded-lg p-3 text-center">
-            <div className="text-gray-400 text-xs md:text-sm">High Score</div>
-            <div className="text-xl md:text-2xl font-bold text-green-400">
+          <div className="bg-gray-800/80 backdrop-blur-sm rounded-xl p-4 text-center shadow-lg border border-gray-700/50">
+            <div className="text-gray-400 text-xs sm:text-sm font-medium mb-1">High Score</div>
+            <div className="text-2xl sm:text-3xl font-bold text-green-400">
               {gameState.highScore.toLocaleString()}
             </div>
           </div>
 
-          <div className="bg-gray-800 rounded-lg p-3 text-center">
-            <div className="text-gray-400 text-xs md:text-sm">Time</div>
+          <div className="bg-gray-800/80 backdrop-blur-sm rounded-xl p-4 text-center shadow-lg border border-gray-700/50">
+            <div className="text-gray-400 text-xs sm:text-sm font-medium mb-1">Time</div>
             <div
-              className={`text-xl md:text-2xl font-bold ${
+              className={`text-2xl sm:text-3xl font-bold ${
                 gameState.timeLeft <= 10 ? 'text-red-400 animate-pulse' : 'text-blue-400'
               }`}
             >
@@ -254,9 +255,9 @@ export default function GameBoard() {
             </div>
           </div>
 
-          <div className="bg-gray-800 rounded-lg p-3 text-center">
-            <div className="text-gray-400 text-xs md:text-sm">Moves</div>
-            <div className="text-xl md:text-2xl font-bold text-purple-400">
+          <div className="bg-gray-800/80 backdrop-blur-sm rounded-xl p-4 text-center shadow-lg border border-gray-700/50">
+            <div className="text-gray-400 text-xs sm:text-sm font-medium mb-1">Moves</div>
+            <div className="text-2xl sm:text-3xl font-bold text-purple-400">
               {gameState.moves}
             </div>
           </div>
@@ -264,8 +265,8 @@ export default function GameBoard() {
 
         {/* Combo indicator */}
         {gameState.combo > 0 && (
-          <div className="text-center mb-2">
-            <span className="inline-block bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-2 rounded-full font-bold text-sm md:text-base animate-pulse-gem">
+          <div className="text-center mb-4">
+            <span className="inline-block bg-gradient-to-r from-orange-500 via-red-500 to-pink-500 text-white px-6 py-3 rounded-full font-bold text-base sm:text-lg md:text-xl shadow-lg animate-pulse-gem border-2 border-white/30">
               {gameState.combo}x COMBO!
             </span>
           </div>
@@ -274,10 +275,10 @@ export default function GameBoard() {
 
       {/* Game Board */}
       <div
-        className="relative bg-gray-900 rounded-xl p-2 shadow-2xl"
+        className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl p-3 shadow-2xl border-2 border-gray-700/50"
         style={{
-          width: `${cellSize * BOARD_SIZE + 16}px`,
-          height: `${cellSize * BOARD_SIZE + 16}px`,
+          width: `${cellSize * BOARD_SIZE + 24}px`,
+          height: `${cellSize * BOARD_SIZE + 24}px`,
         }}
       >
         <div
@@ -315,18 +316,20 @@ export default function GameBoard() {
 
         {/* Game Over Overlay */}
         {gameState.isGameOver && (
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm rounded-xl flex items-center justify-center">
-            <div className="text-center p-6">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Game Over!</h2>
-              <p className="text-xl md:text-2xl mb-2 text-yellow-400">
+          <div className="absolute inset-0 bg-black/90 backdrop-blur-md rounded-2xl flex items-center justify-center p-4">
+            <div className="text-center">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-transparent bg-clip-text">
+                Game Over!
+              </h2>
+              <p className="text-2xl sm:text-3xl mb-3 text-yellow-400 font-bold">
                 Final Score: {gameState.score.toLocaleString()}
               </p>
-              <p className="text-base md:text-lg mb-6 text-gray-300">
+              <p className="text-lg sm:text-xl mb-8 text-gray-300">
                 Moves: {gameState.moves}
               </p>
               <button
                 onClick={resetGame}
-                className="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white font-bold py-3 px-8 rounded-full transition-all transform hover:scale-105 active:scale-95"
+                className="bg-gradient-to-r from-purple-500 via-pink-500 to-pink-600 hover:from-purple-600 hover:via-pink-600 hover:to-pink-700 text-white font-bold py-4 px-10 rounded-full transition-all transform hover:scale-105 active:scale-95 shadow-lg text-lg"
               >
                 Play Again
               </button>
@@ -336,19 +339,33 @@ export default function GameBoard() {
       </div>
 
       {/* Instructions */}
-      <div className="max-w-2xl text-center text-gray-400 text-sm md:text-base">
-        <p>
-          Tap two adjacent gems to swap them. Match 3 or more of the same color to score
-          points!
-        </p>
-        <p className="mt-2">Chain matches for combo bonuses!</p>
+      <div className="w-full max-w-2xl bg-gray-800/50 backdrop-blur-sm rounded-xl p-6 border border-gray-700/50">
+        <h3 className="text-lg sm:text-xl font-bold text-white mb-3 text-center">How to Play</h3>
+        <div className="space-y-2 text-gray-300 text-sm sm:text-base">
+          <p className="flex items-start gap-2">
+            <span className="text-purple-400 font-bold flex-shrink-0">1.</span>
+            <span>Tap a gem to <strong className="text-white">select it</strong> (it will show a white ring)</span>
+          </p>
+          <p className="flex items-start gap-2">
+            <span className="text-purple-400 font-bold flex-shrink-0">2.</span>
+            <span>Tap an <strong className="text-white">adjacent gem</strong> (up, down, left, or right) to swap them</span>
+          </p>
+          <p className="flex items-start gap-2">
+            <span className="text-purple-400 font-bold flex-shrink-0">3.</span>
+            <span>Match <strong className="text-yellow-400">3 or more</strong> of the same color to score points!</span>
+          </p>
+          <p className="flex items-start gap-2">
+            <span className="text-purple-400 font-bold flex-shrink-0">4.</span>
+            <span>Create chain reactions for <strong className="text-orange-400">combo bonuses!</strong></span>
+          </p>
+        </div>
       </div>
 
       {/* Reset Button */}
       {!gameState.isGameOver && (
         <button
           onClick={resetGame}
-          className="bg-gray-700 hover:bg-gray-600 text-white font-medium py-2 px-6 rounded-lg transition-colors"
+          className="bg-gradient-to-r from-gray-700 to-gray-600 hover:from-gray-600 hover:to-gray-500 text-white font-bold py-3 px-8 rounded-xl transition-all transform hover:scale-105 active:scale-95 shadow-lg border border-gray-600"
         >
           New Game
         </button>
